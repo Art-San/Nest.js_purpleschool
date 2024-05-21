@@ -10,6 +10,7 @@ import { User, UserSchema } from './models/user.model'
 			{
 				name: User.name,
 				schema: UserSchema,
+				collection: 'User',
 			},
 		]),
 	],
