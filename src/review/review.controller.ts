@@ -18,10 +18,10 @@ import { IdValidationPipe } from 'src/pipes/id-validation.pipe'
 @Controller('review')
 export class ReviewController {
 	constructor(private readonly reviewService: ReviewService) {}
-	// @Get()
-	// async getAll() {
-	// 	return this.reviewService.findAll()
-	// }
+	@Get()
+	async getAll() {
+		return this.reviewService.findAll()
+	}
 
 	@Post('create')
 	async create(@Body() dto: CreateReviewDto) {
