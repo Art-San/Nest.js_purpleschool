@@ -13,36 +13,41 @@ import { ReviewModel } from './review.model'
 import { ReviewService } from './review.service'
 import { CreateReviewDto } from './dto/create-review.dto'
 import { REVIEW_NOT_FOUND } from './review.constants'
-import { IdValidationPipe } from 'src/pipes/id-validation.pipe'
+// import { IdValidationPipe } from 'src/pipes/id-validation.pipe'
 
 @Controller('review')
 export class ReviewController {
 	constructor(private readonly reviewService: ReviewService) {}
-	@Get()
-	async getAll() {
-		return this.reviewService.findAll()
-	}
 
 	@Post('create')
 	async create(@Body() dto: CreateReviewDto) {
 		return this.reviewService.create(dto)
 	}
 
+	@Get('byProduct/:productId')
+	async getProduct(@Param('productId') productId: string) {
+		const res = await this.reviewService.findByProductId(productId)
+		// console.log(23, 'review', res[0].productId)
+		return res
+	}
+
 	@Delete(':id')
-	@UsePipes(new IdValidationPipe())
+	// @UsePipes(new IdValidationPipe())
 	async delete(@Param('id') id: string) {
 		try {
 			const deletedDoc = await this.reviewService.delete(id)
 			if (!deletedDoc) {
 				throw new HttpException(REVIEW_NOT_FOUND, HttpStatus.NOT_FOUND)
 			}
+			return { msg: 'Удалено' }
 		} catch (error) {
-			console.error(error)
-			throw new HttpException(
-				'An error occurred while deleting the review.',
-				HttpStatus.INTERNAL_SERVER_ERROR
-			)
+			throw error
 		}
+	}
+
+	@Get()
+	async getAll() {
+		return this.reviewService.findAll()
 	}
 
 	// @Delete(':id')
@@ -52,9 +57,4 @@ export class ReviewController {
 	// 		throw new HttpException(REVIEW_NOT_FOUND, HttpStatus.NOT_FOUND)
 	// 	}
 	// }
-
-	@Get('byProduct/:productId')
-	async getProduct(@Param('productId') productId: string) {
-		return this.reviewService.findByProductId(productId)
-	}
 }

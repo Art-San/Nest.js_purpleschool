@@ -1,11 +1,17 @@
 import { ConfigService } from '@nestjs/config' // Доступ до ENV
 import { MongooseModuleFactoryOptions } from '@nestjs/mongoose'
 
+// export const getMongoConfig = async (
+// 	configService: ConfigService
+// ): Promise<MongooseModuleFactoryOptions> => ({
+// 	// uri: 'mongodb://admin:admin@localhost:27017/admin',
+// 	uri: configService.get('MONGO_URI'),
+// })
 export const getMongoConfig = async (
 	configService: ConfigService
 ): Promise<MongooseModuleFactoryOptions> => ({
 	// uri: 'mongodb://admin:admin@localhost:27017/admin',
-	uri: configService.get('MONGO_URI'),
+	uri: getMongoString(configService),
 })
 
 // Из видео вариан

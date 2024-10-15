@@ -10,28 +10,31 @@ export class ReviewService {
 		@InjectModel(ReviewModel.name) private reviewModel: Model<ReviewDocument>
 	) {}
 
-	async findAll() {
-		return await this.reviewModel.find()
-	}
-
-	//
 	async create(dto: CreateReviewDto): Promise<ReviewDocument> {
 		return this.reviewModel.create(dto)
 	}
 
 	async delete(id: string): Promise<ReviewDocument> | null {
-		return await this.reviewModel.findByIdAndDelete(id)
+		return await this.reviewModel.findByIdAndDelete(id).exec()
 	}
 
 	async findByProductId(productId: string): Promise<ReviewDocument[]> | null {
-		return await this.reviewModel.find({
-			productId: new Types.ObjectId(productId),
-		})
+		return await this.reviewModel
+			.find({
+				productId: productId,
+			})
+			.exec()
 	}
 
-	async deleteByProductId(productId: string) {
-		return await this.reviewModel.deleteMany({
-			productId: new Types.ObjectId(productId),
-		})
+	async findAll() {
+		return await this.reviewModel.find()
 	}
+
+	// async deleteByProductId(productId: string) {
+	// 	return await this.reviewModel
+	// 		.deleteMany({
+	// 			productId: new Types.ObjectId(productId),
+	// 		})
+	// 		.exec()
+	// }
 }

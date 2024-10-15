@@ -6,7 +6,7 @@ type OldType = {
 }
 
 type NewType = {
-	name: number
+	name: string
 	age: number
 }
 
@@ -20,15 +20,15 @@ export class AppService {
 	constructor(private readonly configService: ConfigService) {}
 	getHello(): string {
 		const test = this.configService.get('TEST')
-		console.log(0, test)
+		console.log(10, 'AppService', test)
 		const newPerson = this.mapToNewType(oldPerson)
-		console.log(newPerson) // { name: 25, age: 25 }
+		console.log(20, 'AppService', newPerson) // { name: 25, age: 25 }
 		return 'Hello World!'
 	}
 
 	mapToNewType(oldObj: OldType): NewType {
 		return {
-			name: Number(oldObj.name),
+			name: oldObj.name,
 			age: Number(oldObj.age),
 		}
 	}
