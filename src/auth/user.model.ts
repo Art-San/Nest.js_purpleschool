@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { HydratedDocument } from 'mongoose'
 
-export type AuthDocument = HydratedDocument<AuthModel>
+export type UserDocument = HydratedDocument<UserModel>
 
 @Schema({
 	versionKey: false,
 	timestamps: true,
 	validateBeforeSave: true,
 })
-export class AuthModel {
+export class UserModel {
 	@Prop({ unique: true, required: true })
 	email: string
 
@@ -22,7 +22,7 @@ export class AuthModel {
 	updatedAt: Date
 }
 
-export const AuthSchema = SchemaFactory.createForClass(AuthModel)
+export const UserSchema = SchemaFactory.createForClass(UserModel)
 
 // `validateBeforeSave: true` - Проверяет валидность документа перед
 // его сохранением в базу данных. Если документ не проходит проверку
