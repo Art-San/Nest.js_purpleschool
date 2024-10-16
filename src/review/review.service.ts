@@ -4,6 +4,10 @@ import { ReviewDocument, ReviewModel } from './review.model'
 import { InjectModel } from '@nestjs/mongoose'
 import { CreateReviewDto } from './dto/create-review.dto'
 
+class Leak {}
+
+const leaks = []
+
 @Injectable()
 export class ReviewService {
 	constructor(
@@ -15,11 +19,12 @@ export class ReviewService {
 	}
 
 	async delete(id: string): Promise<ReviewDocument> | null {
-		return await this.reviewModel.findByIdAndDelete(id).exec()
+		return this.reviewModel.findByIdAndDelete(id).exec()
 	}
 
 	async findByProductId(productId: string): Promise<ReviewDocument[]> | null {
-		return await this.reviewModel
+		leaks.push(new Leak())
+		return this.reviewModel
 			.find({
 				productId: productId,
 			})

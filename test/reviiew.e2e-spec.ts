@@ -39,6 +39,14 @@ describe('AppController (e2e)', () => {
 		expect(createdId).toBeDefined()
 	})
 
+	it('/review/create (POST) - fail', async () => {
+		const response = await request(app.getHttpServer())
+			.post('/review/create')
+			.send({ ...testDto, rating: 0 })
+			.expect(400)
+		console.log(777, response.body)
+	})
+
 	it('/review/byProduct/:productId (GET) - success', async () => {
 		const response = await request(app.getHttpServer())
 			.get('/review/byProduct/' + productId)
@@ -46,14 +54,6 @@ describe('AppController (e2e)', () => {
 
 		expect(response.body.length).toBe(1)
 	})
-	// it('/review/byProduct/:productId (GET) - success', async () => {
-	// 	return request(app.getHttpServer())
-	// 		.get('/review/byProduct/' + productId)
-	// 		.expect(200)
-	// 		.then(({ body }: request.Response) => {
-	// 			expect(body.length).toBe(1)
-	// 		})
-	// })
 
 	it('/review/byProduct/:productId (GET) - fail', async () => {
 		const response = await request(app.getHttpServer())

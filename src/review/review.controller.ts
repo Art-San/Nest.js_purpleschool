@@ -8,27 +8,28 @@ import {
 	UsePipes,
 	Param,
 	Post,
+	ValidationPipe,
 } from '@nestjs/common'
 import { ReviewModel } from './review.model'
 import { ReviewService } from './review.service'
 import { CreateReviewDto } from './dto/create-review.dto'
 import { REVIEW_NOT_FOUND } from './review.constants'
-// import { IdValidationPipe } from 'src/pipes/id-validation.pipe'
+import { IdValidationPipe } from 'src/pipes/id-validation.pipe'
 
 @Controller('review')
 export class ReviewController {
 	constructor(private readonly reviewService: ReviewService) {}
 
+	@UsePipes(new ValidationPipe())
 	@Post('create')
 	async create(@Body() dto: CreateReviewDto) {
+		console.log()
 		return this.reviewService.create(dto)
 	}
 
 	@Get('byProduct/:productId')
 	async getProduct(@Param('productId') productId: string) {
-		const res = await this.reviewService.findByProductId(productId)
-		// console.log(23, 'review', res[0].productId)
-		return res
+		return this.reviewService.findByProductId(productId)
 	}
 
 	@Delete(':id')
