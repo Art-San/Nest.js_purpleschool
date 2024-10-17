@@ -14,6 +14,7 @@ import { ALREADY_REGISTERED_ERROR } from './auth.constants'
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
+
 	@UsePipes(new ValidationPipe())
 	@Post('register')
 	async register(@Body() dto: AuthDto) {
@@ -24,7 +25,11 @@ export class AuthController {
 		return this.authService.createUser(dto)
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post('login')
 	@HttpCode(200)
-	async login(@Body() dto: AuthDto) {}
+	async login(@Body() { login, password }: AuthDto) {
+		const { email } = await this.authService.validateUser(login, password)
+		return this.authService.login(email)
+	}
 }
