@@ -3,9 +3,8 @@ import { AuthDto } from './dto/auth.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 import { UserDocument, UserModel } from './user.model'
-import { compare, genSalt } from 'bcryptjs'
+import { compare, genSalt, hash } from 'bcryptjs'
 import { USER_NOT_FOUND_ERROR, WRONG_PASSWORD_ERROR } from './auth.constants'
-import { hash } from 'crypto'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable() // указывает что это можно использовать как провайдер
@@ -17,10 +16,12 @@ export class AuthService {
 	) {}
 	async createUser(dto: AuthDto) {
 		const salt = await genSalt(10)
+
 		const newUser = new this.userModel({
 			email: dto.login,
-			passwordHash: hash(dto.password, salt),
+			passwordHash: await hash(dto.password, salt),
 		})
+
 		return newUser.save()
 	}
 

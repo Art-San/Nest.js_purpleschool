@@ -9,12 +9,15 @@ import {
 	Param,
 	Post,
 	ValidationPipe,
+	UseGuards,
 } from '@nestjs/common'
 import { ReviewModel } from './review.model'
 import { ReviewService } from './review.service'
 import { CreateReviewDto } from './dto/create-review.dto'
 import { REVIEW_NOT_FOUND } from './review.constants'
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe'
+import { JwtAuthGuard } from '../auth/guards/jwt.guard'
+import { UserEmail } from '../decorators/user-email.decorator'
 
 @Controller('review')
 export class ReviewController {
@@ -27,13 +30,19 @@ export class ReviewController {
 		return this.reviewService.create(dto)
 	}
 
+	// @UseGuards(JwtAuthGuard)
 	@Get('byProduct/:productId')
-	async getProduct(@Param('productId') productId: string) {
+	async getProduct(
+		@Param('productId') productId: string,
+		@UserEmail() email: string
+	) {
+		// console.log(12, 'UserEmail декаратор', email)
 		return this.reviewService.findByProductId(productId)
 	}
 
+	@UseGuards(JwtAuthGuard)
+	// @UsePipes(new IdValidationPipe()) // не работает
 	@Delete(':id')
-	// @UsePipes(new IdValidationPipe())
 	async delete(@Param('id') id: string) {
 		try {
 			const deletedDoc = await this.reviewService.delete(id)
